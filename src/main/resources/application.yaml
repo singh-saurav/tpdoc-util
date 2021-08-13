@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: tpdoc-util
+  profiles:
+    active: it
+logging:
+  file:
+    name: tpdoc-util.log
+    path: .
+  level:
+    root: INFO
+    com.maersk.tpdoc: INFO
+
+---
+spring:
+  config:
+    activate:
+      on-profile: it
+
+  datasource:
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    url: jdbc:oracle:thin:@ scrbodbdk008854.crb.apmoller.net:1526/PT0GEMDP_SERVICE
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 900000
+      max-lifetime: 1200000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: pp
+
+  datasource:
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    url: jdbc:oracle:thin:@ (DESCRIPTION =(ADDRESS_LIST =(ADDRESS = (PROTOCOL = TCP)(HOST = SB009-GEMDP.crb.apmoller.net)(PORT = 1526))(ADDRESS = (PROTOCOL = TCP)(HOST = SY009-GEMDP.crb.apmoller.net)(PORT = 1526)))(CONNECT_DATA =(SERVICE_NAME = PX0GEMDP_SVC)(SERVER = DEDICATED)(FAILOVER_MODE =(TYPE = session)(METHOD = BASIC)(RETRIES = 3)(DELAY = 5))))
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 900000
+      max-lifetime: 1200000
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    url: jdbc:oracle:thin:@ (DESCRIPTION =(ADDRESS_LIST =(ADDRESS = (PROTOCOL = TCP)(HOST = SB017-GEMDP.crb.apmoller.net)(PORT = 1526))(ADDRESS = (PROTOCOL = TCP)(HOST = SY017-GEMDP.crb.apmoller.net)(PORT = 1526)))(CONNECT_DATA =(SERVICE_NAME = PP0GEMDP_SVC)(SERVER = DEDICATED)(FAILOVER_MODE =(TYPE = session)(METHOD = BASIC)(RETRIES = 3)(DELAY = 5))))
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 900000
+      max-lifetime: 1200000
+
