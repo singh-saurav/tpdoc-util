@@ -26,6 +26,8 @@ spring:
       minimum-idle: 5
       connection-timeout: 900000
       max-lifetime: 1200000
+      idle-timeout: 450000
+      leak-detection-threshold: 600000
 
 ---
 spring:
@@ -42,6 +44,8 @@ spring:
       minimum-idle: 5
       connection-timeout: 900000
       max-lifetime: 1200000
+      idle-timeout: 450000
+      leak-detection-threshold: 600000
 
 ---
 spring:
@@ -58,4 +62,6 @@ spring:
       minimum-idle: 5
       connection-timeout: 900000
       max-lifetime: 1200000
+      idle-timeout: 450000
+      leak-detection-threshold: 600000
 
