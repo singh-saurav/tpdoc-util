@@ -36,6 +36,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 public class GDSBatchConfig extends DefaultBatchConfigurer {
 
+    private static final String FILTER_SELECT = "WHERE FULLORPARTIAL = 'F' AND GDSINSTANCEID IS NULL AND TRUNC(CRTTMST) BETWEEN TO_DATE('2021-07-07', 'YYYY-MM-DD') AND TO_DATE('2021-07-18', 'YYYY-MM-DD')";
+
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
 
@@ -60,7 +62,7 @@ public class GDSBatchConfig extends DefaultBatchConfigurer {
         final OraclePagingQueryProvider provider = new OraclePagingQueryProvider();
         provider.setSelectClause("SELECT INSTANCEID, CONTENT");
         provider.setFromClause("FROM GEMS.GEMSEVTGDS");
-        provider.setWhereClause("WHERE FULLORPARTIAL = 'F' AND GDSINSTANCEID IS NULL");
+        provider.setWhereClause(FILTER_SELECT);
         provider.setSortKeys(sortKeys);
         result.setSaveState(false);
         result.setQueryProvider(provider);
