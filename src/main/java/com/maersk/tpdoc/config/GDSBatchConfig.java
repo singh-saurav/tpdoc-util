@@ -36,7 +36,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 public class GDSBatchConfig extends DefaultBatchConfigurer {
 
-    private static final String FILTER_SELECT = "WHERE FULLORPARTIAL = 'F' AND GDSINSTANCEID IS NULL AND TRUNC(CRTTMST) BETWEEN TO_DATE('2021-07-07', 'YYYY-MM-DD') AND TO_DATE('2021-07-18', 'YYYY-MM-DD')";
+    private static final String FILTER_SELECT = "WHERE FULLORPARTIAL = 'F' AND GDSINSTANCEID IS NULL AND TRUNC(CRTTMST) BETWEEN TO_DATE('2021-06-07', 'YYYY-MM-DD') AND TO_DATE('2021-07-18', 'YYYY-MM-DD')";
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
@@ -54,7 +54,7 @@ public class GDSBatchConfig extends DefaultBatchConfigurer {
         final JdbcPagingItemReader<GDSMessage> result = new JdbcPagingItemReader<>();
         result.setName("GDSMessageReader");
         result.setDataSource(dataSource);
-        result.setPageSize(1000);
+        result.setPageSize(2000);
         result.setRowMapper(new GDSMessageMapper());
 
         Map<String, Order> sortKeys = new HashMap<>();
@@ -86,14 +86,14 @@ public class GDSBatchConfig extends DefaultBatchConfigurer {
     public Step step(final ItemReader<GDSMessage> gdsMessageReader, final GDSMessageProcessor gdsMessageProcessor,
                      final ItemWriter<GDSUpdate> recordWriter) {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(5);
-        taskExecutor.setMaxPoolSize(5);
+        taskExecutor.setCorePoolSize(10);
+        taskExecutor.setMaxPoolSize(15);
         taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         taskExecutor.setThreadNamePrefix("GDSStep");
         taskExecutor.afterPropertiesSet();
 
         return this.stepBuilderFactory.get("gdsStep")
-                .<GDSMessage, GDSUpdate>chunk(150)
+                .<GDSMessage, GDSUpdate>chunk(250)
                 .listener(new GDSChunkListener())
                 .reader(gdsMessageReader)
                 .processor(gdsMessageProcessor)
